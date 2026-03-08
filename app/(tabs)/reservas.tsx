@@ -3,11 +3,13 @@ import { StyleSheet } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
-export default function indexScreen() {
+export default function reservasScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Inicio</ThemedText>
-      <ThemedText>Esta es la pantalla de Inicio.</ThemedText>
+      <ThemedText type="title">Reservas</ThemedText>
+      <ThemedText>
+        Esta es la pantalla de reservas. Aquí puedes gestionar tus reservas.
+      </ThemedText>
     </ThemedView>
   );
 }

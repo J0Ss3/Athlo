@@ -3,11 +3,11 @@ import { StyleSheet } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
-export default function indexScreen() {
+export default function perfilScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Inicio</ThemedText>
-      <ThemedText>Esta es la pantalla de Inicio.</ThemedText>
+      <ThemedText type="title">Perfil</ThemedText>
+      <ThemedText>Esta es la pantalla de Perfil.</ThemedText>
     </ThemedView>
   );
 }
