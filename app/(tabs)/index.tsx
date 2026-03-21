@@ -1,21 +1,90 @@
-import { StyleSheet } from "react-native";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import SectionHeader from "@/components/common/sectionHeader";
+import FeaturedCourtCard from "@/components/home/featuredCard";
+import PopularCourtCard from "@/components/home/popularCard";
+import SearchBar from "@/components/home/searchBar";
+import styles from "@/styles/home.styles";
 
-export default function indexScreen() {
+const featuredCourts = [
+  {
+    title: "Pádel Club Central",
+    subtitle: "Pádel",
+    image:
+      "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    title: "Tenis del Valle",
+    subtitle: "Tenis",
+    image:
+      "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=1200&auto=format&fit=crop",
+  },
+];
+
+const popularCourts = [
+  {
+    price: "$100",
+    location: "Locación Satélite",
+    type: "Tenis",
+    rating: "4.5",
+    image:
+      "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    price: "$200",
+    location: "Locación Sinaloa",
+    type: "Pádel",
+    rating: "4.8",
+    image:
+      "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1200&auto=format&fit=crop",
+  },
+];
+
+export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Inicio</ThemedText>
-      <ThemedText>Esta es la pantalla de Inicio.</ThemedText>
-    </ThemedView>
+    <View style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <Text style={styles.title}>Athlo</Text>
+
+        <SearchBar />
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {featuredCourts.map((court) => (
+            <FeaturedCourtCard
+              key={court.title}
+              title={court.title}
+              subtitle={court.subtitle}
+              image={court.image}
+            />
+          ))}
+        </ScrollView>
+
+        <View style={styles.carouselDots}>
+          <View style={styles.dotActive} />
+          <View style={styles.dot} />
+        </View>
+
+        <View style={styles.sectionWhite}>
+          <SectionHeader title="Canchas Populares" actionText="Ver más" />
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {popularCourts.map((court) => (
+              <PopularCourtCard
+                key={court.location}
+                price={court.price}
+                location={court.location}
+                type={court.type}
+                rating={court.rating}
+                image={court.image}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

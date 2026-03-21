@@ -1,21 +1,44 @@
-import { StyleSheet } from "react-native";
+import { router } from "expo-router";
+import React from "react";
+import { Image, ScrollView, Text, View } from "react-native";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import ProfileActionItem from "@/components/perfil/profileActionItem";
+//import ReservationItem from "@/components/perfil/reservationItem";
+import styles from "@/styles/perfil.styles";
 
-export default function perfilScreen() {
+export default function PerfilScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Perfil</ThemedText>
-      <ThemedText>Esta es la pantalla de Perfil.</ThemedText>
-    </ThemedView>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Perfil</Text>
+
+        <Image
+          source={{
+            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4_Lw65lPJm8QgePbVKtds0OCvCb3EICxxfg&s",
+          }}
+          style={styles.avatar}
+        />
+
+        <Text style={styles.name}>Nombre Usuario</Text>
+        <Text style={styles.username}>usuario@email.com</Text>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.cardSection}>
+          <Text style={styles.sectionTitle}>Opciones</Text>
+          <ProfileActionItem
+            label="Métodos de Pago"
+            onPress={() => router.push("/(tabs)/pagos")}
+          />
+          <ProfileActionItem
+            label="Configuración"
+            onPress={() => router.push("/(tabs)/ajustes")}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
