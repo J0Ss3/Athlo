@@ -70,6 +70,44 @@ export default function TabLayout() {
           href: null,
         }}
       />
+
+      <Tabs.Screen
+        name="admin"
+        options={{
+          title: "Admin",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={24} name="shield.fill" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="finanzas"
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="mis-canchas"
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="mis-reservas"
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="resumen"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

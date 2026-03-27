@@ -6,6 +6,7 @@ const MAPPING = {
   "house.fill": "home",
   "person.fill": "person",
   "chevron.right": "chevron-right",
+  "shield.fill": "shield",
   calendar: "calendar-today",
 } as const;
 

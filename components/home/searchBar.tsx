@@ -8,7 +8,7 @@ export default function SearchBar() {
     <View
       style={{
         backgroundColor: AppTheme.colors.white,
-        borderRadius: 20,
+        borderRadius: 14,
         height: 46,
         flexDirection: "row",
         alignItems: "center",
@@ -18,12 +18,13 @@ export default function SearchBar() {
     >
       <MaterialIcons name="search" size={20} color="#A0A7B4" />
       <TextInput
-        placeholder="Buscar cancha"
+        placeholder="Buscar canchas..."
         placeholderTextColor="#A0A7B4"
         style={{
           marginLeft: 8,
           flex: 1,
           color: AppTheme.colors.text,
+          fontSize: 14,
         }}
       />
     </View>
