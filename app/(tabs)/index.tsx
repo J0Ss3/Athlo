@@ -1,111 +1,59 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import CategoryChip from "@/components/home/categoryChip";
 import FeaturedCourtCard from "@/components/home/featuredCard";
 import PopularCourtCard from "@/components/home/popularCard";
 import SearchBar from "@/components/home/searchBar";
+import fieldService from "@/services/other_services/field.service";
+import sportTypeService from "@/services/other_services/sportType.service";
 import styles from "@/styles/home.styles";
-
-const featuredCourts = [
-  {
-    id: "1",
-    title: "Pádel Club Miramontes",
-    location: "Col. Miramontes, Tegucigalpa",
-    subtitle: "Pádel",
-    surface: "Pádel",
-    lighting: "Lámpara",
-    price: 2450,
-    image:
-      "https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop",
-    schedules: [
-      "06:00", "07:00", "08:00", "09:00",
-      "10:00", "11:00", "12:00", "13:00",
-      "14:00", "15:00", "16:00", "17:00",
-      "18:00", "19:00", "20:00", "21:00",
-      "22:00", "23:00",
-    ],
-  },
-  {
-    id: "2",
-    title: "Tenis Club Palmira",
-    location: "Col. Palmira, Tegucigalpa",
-    subtitle: "Tenis",
-    surface: "Sintética",
-    lighting: "LED",
-    price: 2200,
-    image:
-      "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=1200&auto=format&fit=crop",
-    schedules: [
-      "08:00", "09:00", "10:00", "11:00",
-      "12:00", "13:00", "14:00", "15:00",
-      "18:00", "19:00", "20:00",
-    ],
-  },
-];
-
-const popularCourts = [
-  {
-    id: "3",
-    title: "Residencial Agua Dulc...",
-    subtitle: "Fútbol",
-    surface: "Cemento",
-    lighting: "Reflectores",
-    price: 2450,
-    rating: "4.8",
-    image:
-      "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?q=80&w=1200&auto=format&fit=crop",
-    schedules: [
-      "06:00", "07:00", "08:00", "16:00",
-      "17:00", "18:00", "19:00", "20:00",
-    ],
-  },
-  {
-    id: "4",
-    title: "Col. El Trapiche, frente...",
-    subtitle: "Fútbol",
-    surface: "Pádel",
-    lighting: "LED",
-    price: 2200,
-    rating: "4.7",
-    image:
-      "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1200&auto=format&fit=crop",
-    schedules: [
-      "07:00", "08:00", "09:00", "10:00",
-      "11:00", "12:00", "17:00", "18:00",
-      "19:00", "20:00",
-    ],
-  },
-  {
-    id: "5",
-    title: "Cancha Los Pinos",
-    subtitle: "Fútbol",
-    surface: "Grama",
-    lighting: "LED",
-    price: 1800,
-    rating: "4.5",
-    image:
-      "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?q=80&w=1200&auto=format&fit=crop",
-    schedules: [
-      "06:00", "07:00", "08:00", "09:00",
-      "16:00", "17:00", "18:00", "19:00",
-    ],
-  },
-];
-
-const categories = [
-  { id: "todos", label: "Todos", emoji: "⚽", color: "#2563EB" },
-  { id: "futbol", label: "Fútbol", emoji: "⚽", color: "#1E3A5F" },
-  { id: "padel", label: "Pádel", emoji: "🏓", color: "#E11D48" },
-  { id: "tenis", label: "Tenis", emoji: "🎾", color: "#DC2626" },
-  { id: "basquet", label: "Básquet", emoji: "🏀", color: "#EA580C" },
-];
+import { Field, SportType } from "@/types/other_types/facility";
 
 export default function HomeScreen() {
-  const [activeCategory, setActiveCategory] = useState("todos");
+  const [activeCategory, setActiveCategory] = useState(0);
+
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
+  const [sort, setSort] = useState(0);
+  const [param, setParam] = useState("reviewCount");
+
+  const [categories, setCategories] = useState<SportType[]>();
+  const [featuredCourts, setFeaturedCourts] = useState<Field[]>();
+  const [popularCourts, setPopularCourts] = useState<Field[]>();
+
   const router = useRouter();
+
+  useEffect( ()=> {
+    console.log("initializer");
+
+    sportTypeService.getAllTypes().then((response)=>{
+      setCategories(response.data);
+    });
+
+    // fieldService.getAllFields(page,size,sort,"reviews").then((response) => {
+    //   setPopularCourts(response.data.data);
+      
+    // });
+
+  },[])
+
+  useEffect(()=>{
+    console.log("useEffect page,size,sort,param");
+
+    fieldService.getFieldsBySportType(activeCategory,page,size,sort,param).then((response) => {
+      if(!response.hasError){
+        setFeaturedCourts(response.data.data);
+        setPopularCourts(response.data.data);
+      }else{
+        setFeaturedCourts(undefined);
+        setPopularCourts(undefined);
+      }
+    });
+    
+  },[page,size,sort,param,activeCategory]);
 
   return (
     <View style={styles.container}>
@@ -130,16 +78,26 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
           style={styles.categoriesRow}
         >
-          {categories.map((cat) => (
-            <CategoryChip
-              key={cat.id}
-              label={cat.label}
-              emoji={cat.emoji}
-              color={cat.color}
-              isActive={activeCategory === cat.id}
-              onPress={() => setActiveCategory(cat.id)}
+          <CategoryChip
+              key={0}
+              label={"Todos"}
+              emoji={"&#9917;"}
+              color={"#2563EB"}
+              isActive={activeCategory == 0}
+              onPress={() => setActiveCategory(0)}
             />
-          ))}
+          {categories && (
+            categories.map((cat) => (
+              <CategoryChip
+                key={cat.idSportType}
+                label={cat.sportName}
+                emoji={cat.icon ?? "&#9917;"}
+                color={cat.color ?? "#2563EB"}
+                isActive={activeCategory == cat.idSportType}
+                onPress={() => setActiveCategory(cat.idSportType)}
+              />
+            ))
+          )}
         </ScrollView>
 
         {/* Canchas Destacadas */}
@@ -151,15 +109,19 @@ export default function HomeScreen() {
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {featuredCourts.map((court) => (
-            <FeaturedCourtCard
-              key={court.id}
-              title={court.title}
-              subtitle={court.location}
-              image={court.image}
-              onPress={() => router.push(`/cancha/${court.id}` as any)}
-            />
-          ))}
+          {featuredCourts ? (
+            featuredCourts.map((court) => (
+              <FeaturedCourtCard
+                key={court.idField}
+                title={court.fieldName}
+                subtitle={court.Facility.address}
+                image={court.FieldImages[0]?.thumbnailUrl ?? court.FieldImages[0].imgUrl}
+                onPress={() => router.push(`/cancha/${court.idField}` as any)}
+              />
+            ))
+          ): (
+              <Text>No hay canchas disponibles</Text>
+            )}
         </ScrollView>
 
         <View style={styles.carouselDots}>
@@ -177,17 +139,21 @@ export default function HomeScreen() {
           </View>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {popularCourts.map((court) => (
-              <PopularCourtCard
-                key={court.id}
-                price={`L ${court.price}`}
-                location={court.title}
-                type={court.subtitle}
-                rating={court.rating}
-                image={court.image}
-                onPress={() => router.push(`/cancha/${court.id}` as any)}
-              />
-            ))}
+            {popularCourts ? (
+              popularCourts.map((court) => (
+                <PopularCourtCard
+                  key={court.idField}
+                  price={`L ${court.pricePerDay ?? court.pricePerHour}`}
+                  location={court.Facility.city}
+                  type={court.SurfaceType.surfaceName}
+                  rating={court.rating.toString()}
+                  image={court.FieldImages[0]?.thumbnailUrl ?? court.FieldImages[0].imgUrl}
+                  onPress={() => router.push(`/cancha/${court.idField}` as any)}
+                />
+              ))
+            ): (
+              <Text>No hay canchas disponibles</Text>
+            )}
           </ScrollView>
         </View>
       </ScrollView>

@@ -1,7 +1,9 @@
+import { SHA256 } from 'crypto-js';
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
+import authService from "@/services/other_services/auth.service";
 import styles from "@/styles/login.styles";
 
 export default function LoginScreen() {
@@ -9,8 +11,20 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
 
   function handleLogin() {
-    // Temporal: navegación directa sin backend
-    router.replace("/(tabs)");
+
+    const hashedPassword = SHA256(password).toString();
+
+    const payload = {
+      email : email,
+      password: hashedPassword
+    }
+
+    authService.login(payload).then((response) => {
+      if(!response.hasError){
+        router.replace("/(tabs)");
+      }
+    });
+    
   }
 
   return (

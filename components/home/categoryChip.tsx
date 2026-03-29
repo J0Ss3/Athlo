@@ -17,6 +17,20 @@ export default function CategoryChip({
   isActive = false,
   onPress,
 }: CategoryChipProps) {
+
+  const convertHtmlEntityToEmoji = (entity: string) => {
+    if (entity.startsWith('&#')) {
+      const match = entity.match(/&#(\d+);/);
+      if (match && match[1]) {
+        const code = parseInt(match[1], 10);
+        if (!isNaN(code) && code >= 0 && code <= 0x10FFFF) {
+          return String.fromCodePoint(code);
+        }
+      }
+    }
+    return entity;
+  };
+
   return (
     <TouchableOpacity
       style={[styles.chip, isActive && styles.chipActive]}
@@ -24,7 +38,7 @@ export default function CategoryChip({
       activeOpacity={0.75}
     >
       <View style={[styles.emojiWrapper, { backgroundColor: color }]}>
-        <Text style={styles.emoji}>{emoji}</Text>
+        <Text style={styles.emoji}>{convertHtmlEntityToEmoji(emoji)}</Text>
       </View>
       <Text style={[styles.label, isActive && styles.labelActive]}>
         {label}
