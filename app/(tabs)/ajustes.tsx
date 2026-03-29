@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import React from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
@@ -5,10 +6,17 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import styles from "@/styles/ajustes.styles";
 
 export default function AjustesScreen() {
-  function handleLogout() {
-    Alert.alert("Sesión cerrada", "Has cerrado sesión exitosamente");
-    router.replace("/(auth)/login");
-  }
+    async function handleLogout() {
+      try {
+        await AsyncStorage.removeItem("authToken");
+        
+        Alert.alert("Sesión cerrada", "Has cerrado sesión exitosamente");
+        router.replace("/(auth)/login");
+      } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+        Alert.alert("Error", "No se pudo cerrar la sesión");
+      }
+    }
 
   return (
     <View style={styles.container}>
