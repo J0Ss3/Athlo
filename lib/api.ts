@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ⚙️ Prioridad: Usa la variable de entorno, si no existe, usa tu IP local manual
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ??;
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ??"";
 
 export const API_URL = API_BASE_URL;
 
