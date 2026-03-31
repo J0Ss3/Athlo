@@ -10,11 +10,18 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Instalar soporte para SVG en Expo
+```bash
+npm install react-native-svg
+npx expo install react-native-svg
+```
+
+3. Start the app
 
    ```bash
    npx expo start
    ```
+
 
 In the output, you'll find options to open the app in a
 
