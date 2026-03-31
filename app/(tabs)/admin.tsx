@@ -1,13 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Redirect } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import AdminActionCard from "@/components/admin/AdminActionCard";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdminQuickStat from "@/components/admin/AdminQuickStat";
+import { useAuth } from "@/providers/auth-provider";
 import styles from "@/styles/admin.styles";
 
 export default function Admin() {
+  const { session } = useAuth();
+
+  if (session?.user.roleName !== "ADMIN") {
+    return <Redirect href="/(tabs)" />;
+  }
+
   return (
     <View style={styles.container}>
       <AdminHeader title="Panel de Administrador" />
@@ -47,7 +55,7 @@ export default function Admin() {
       </TouchableOpacity>
 
       <View style={styles.quick}>
-        <Text style={styles.quickTitle}>Vista Rápida</Text>
+        <Text style={styles.quickTitle}>Vista rápida</Text>
         <View style={styles.quickRow}>
           <AdminQuickStat label="Canchas" value="0" />
           <AdminQuickStat label="Reservas" value="0" />

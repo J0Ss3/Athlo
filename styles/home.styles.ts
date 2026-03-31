@@ -38,10 +38,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginTop: 8,
   },
+  errorBanner: {
+    backgroundColor: "rgba(244, 81, 0, 0.18)",
+    color: "#FFD7C7",
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginBottom: 16,
+  },
   categoriesRow: {
     marginBottom: 20,
   },
-  // Section headers - dark bg
   sectionHeaderDark: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -58,7 +65,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#7AA7C7",
   },
-  // Section headers - light bg
   sectionHeaderLight: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -75,7 +81,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#7AA7C7",
   },
-  // Carousel dots
   carouselDots: {
     flexDirection: "row",
     justifyContent: "center",
@@ -96,7 +101,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#7A94B8",
     marginHorizontal: 4,
   },
-  // Populares section
   sectionWhite: {
     backgroundColor: AppTheme.colors.background,
     marginHorizontal: -20,

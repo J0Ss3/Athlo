@@ -63,6 +63,18 @@ const styles = StyleSheet.create({
     color: "#7AA7C7",
     fontWeight: "600",
   },
+  logoutButton: {
+    marginTop: 18,
+    backgroundColor: "#F45100",
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: "center",
+  },
+  logoutText: {
+    color: AppTheme.colors.white,
+    fontWeight: "700",
+    fontSize: 15,
+  },
 });
 
 export default styles;

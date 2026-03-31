@@ -52,6 +52,9 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
   },
+  buttonDisabled: {
+    opacity: 0.7,
+  },
   buttonText: {
     color: AppTheme.colors.white,
     fontSize: 16,

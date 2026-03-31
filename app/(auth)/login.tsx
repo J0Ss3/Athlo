@@ -2,15 +2,32 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 
+import { useAuth } from "@/providers/auth-provider";
 import styles from "@/styles/login.styles";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useAuth();
 
-  function handleLogin() {
-    // Temporal: navegación directa sin backend
-    router.replace("/(tabs)");
+  async function handleLogin() {
+    if (!email.trim() || !password.trim()) {
+      setError("Ingresa tu correo y contraseña");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setError("");
+      await login(email.trim(), password);
+      router.replace("/(tabs)");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo iniciar sesión");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -29,6 +46,7 @@ export default function LoginScreen() {
         placeholder="correo@ejemplo.com"
         placeholderTextColor="#9aa4b2"
         autoCapitalize="none"
+        keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
       />
@@ -47,8 +65,16 @@ export default function LoginScreen() {
         <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+      {!!error && <Text style={styles.errorText}>{error}</Text>}
+
+      <TouchableOpacity
+        style={[styles.button, isSubmitting && styles.buttonDisabled]}
+        onPress={handleLogin}
+        disabled={isSubmitting}
+      >
+        <Text style={styles.buttonText}>
+          {isSubmitting ? "Entrando..." : "Iniciar sesión"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,24 +1,47 @@
-import { supabase } from "@/lib/supabase";
+import { apiFetchWithHeaders } from "@/lib/api";
+import { type AuthSession } from "@/lib/auth-session";
+
+type LoginResponse = {
+  data: {
+    idUser: number;
+    idRole?: number;
+    roleName?: string;
+    email: string;
+    userName?: string;
+  };
+  meta: {
+    message: string;
+    status: number;
+  };
+  hasError: boolean;
+};
 
 export const AuthService = {
   async login(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const response = await apiFetchWithHeaders<LoginResponse>(
+      "/auth/login",
+      {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      },
+      {
+        requiresAuth: false,
+      },
+    );
 
-    if (error) throw error;
-    return data;
+    const authorization = response.headers.get("Authorization");
+
+    if (!authorization?.startsWith("Bearer ")) {
+      throw new Error("No se recibió un token de autenticación");
+    }
+
+    return {
+      token: authorization.replace("Bearer ", "").trim(),
+      user: response.data.data,
+    } satisfies AuthSession;
   },
 
   async logout() {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-  },
-
-  async getSession() {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) throw error;
-    return data.session;
+    return Promise.resolve();
   },
 };
