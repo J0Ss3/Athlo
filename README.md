@@ -16,7 +16,12 @@ npm install react-native-svg
 npx expo install react-native-svg
 ```
 
-3. Start the app
+3. Instala AsyncStorage:
+```bash
+npx expo install @react-native-async-storage/async-storage
+```
+
+4. Start the app
 
    ```bash
    npx expo start
