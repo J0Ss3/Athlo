@@ -1,4 +1,5 @@
 import { getAuthSession } from "@/lib/auth-session";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? "";
 
@@ -96,3 +97,38 @@ export async function authenticatedFetch<T>(
 ) {
   return apiFetch<T>(endpoint, options);
 }
+
+
+
+// CAMBIA ESTA IP por la IP de tu PC en la red local
+// Windows: CMD → ipconfig → "Dirección IPv4"
+export const API_URL =  process.env.EXPO_PUBLIC_API_BASE_URL ?? "";
+
+// Guardar token JWT
+export async function saveToken(token: string) {
+  await AsyncStorage.setItem('authToken', token);
+}
+
+// Obtener token guardado
+export async function getToken(): Promise<string | null> {
+  return AsyncStorage.getItem('authToken');
+}
+
+// Borrar token (logout)
+export async function clearToken() {
+  await AsyncStorage.removeItem('authToken');
+}
+
+// Fetch con token automático
+export async function apiFetch(endpoint: string, options: RequestInit = {}) {
+  const token = await getToken();
+  return fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+}
+```
