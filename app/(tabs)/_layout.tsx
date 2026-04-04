@@ -8,7 +8,8 @@ import { useAuth } from "@/providers/auth-provider";
 
 export default function TabLayout() {
   const { isAuthenticated, session } = useAuth();
-  const isAdmin = session?.user.roleName === "ADMIN";
+  const normalizedRole = session?.user.roleName?.toLowerCase();
+  const canAccessAdmin = normalizedRole === "admin" || normalizedRole === "provider";
 
   if (!isAuthenticated) {
     return <Redirect href="/(auth)/login" />;
@@ -82,7 +83,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="admin"
         options={{
-          href: isAdmin ? undefined : null,
+          href: canAccessAdmin ? undefined : null,
           title: "Admin",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={24} name="shield.fill" color={color} />

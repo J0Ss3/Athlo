@@ -11,8 +11,9 @@ import styles from "@/styles/admin.styles";
 
 export default function Admin() {
   const { session } = useAuth();
+  const normalizedRole = session?.user.roleName?.toLowerCase();
 
-  if (session?.user.roleName !== "ADMIN") {
+  if (normalizedRole !== "admin" && normalizedRole !== "provider") {
     return <Redirect href="/(tabs)" />;
   }
 

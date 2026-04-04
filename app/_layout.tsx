@@ -1,3 +1,5 @@
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
@@ -8,6 +10,16 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    ...AntDesign.font,
+    ...Ionicons.font,
+    ...MaterialIcons.font,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <AuthProvider>
       <Stack screenOptions={{ headerShown: false }}>
